@@ -1,18 +1,14 @@
-import React, { useState } from "react";
 import axios from "axios";
 
-export default function TaskModal({ isOpen, onClose, userEmail, handleTask }) {
-  const initialStatte = {
-    title: "",
-    description: "",
-    status: "Pending",
-    priority: "Low",
-    dueDate: new Date().toISOString().split("T")[0],
-    plannedDuration: 0,
-    timeSpent: 0,
-  };
-  const [task, setTask] = useState(initialStatte);
-
+export default function TaskModal({
+  isOpen,
+  showModalType,
+  onClose,
+  userEmail,
+  handleTask,
+  handleTasks,
+  task,
+}) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -22,11 +18,23 @@ export default function TaskModal({ isOpen, onClose, userEmail, handleTask }) {
         ? Number(value)
         : value;
 
-    setTask({ ...task, [name]: val });
+    handleTask((prevTask) => ({ ...prevTask, [name]: val }));
   };
   // console.log(task);
   const handleSubmit = async () => {
     try {
+      if (showModalType === "Edit") {
+        const res = await axios.put(
+          `${import.meta.env.VITE_API_URL}api/tasks/${task._id}`,
+          task,
+          { withCredentials: true }
+        );
+        handleTasks((prevTasks) =>
+          prevTasks.map((t) => (t._id === task._id ? res.data : t))
+        );
+        onClose();
+        return;
+      }
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}api/tasks`,
         {
@@ -35,8 +43,7 @@ export default function TaskModal({ isOpen, onClose, userEmail, handleTask }) {
         },
         { withCredentials: true }
       );
-      handleTask((prevTasks) => [...prevTasks, res.data]);
-      setTask(initialStatte);
+      handleTasks((prevTasks) => [...prevTasks, res.data]);
       onClose();
     } catch (err) {
       console.log(userEmail);
@@ -49,7 +56,9 @@ export default function TaskModal({ isOpen, onClose, userEmail, handleTask }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
       <div className="bg-slate-800 p-6 rounded-lg w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">Add Task</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          {`${showModalType}`} Task
+        </h2>
         <label>Title</label>
         <input
           name="title"

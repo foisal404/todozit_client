@@ -51,7 +51,9 @@ export default function TaskCard({ task, onEdit, onDelete }) {
         </p>
         <p>
           <strong>Due:</strong>{" "}
-          {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "N/A"}
+          {task.dueDate === Date.now()
+            ? "Today"
+            : new Date(task.dueDate).toLocaleDateString()}
         </p>
         <p>
           <strong>Planned Duration:</strong> {task.plannedDuration} hrs

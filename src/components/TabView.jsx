@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Tasks from "./Tasks";
 import Note from "./Note";
 
-export default function TabView({ tasks, loadingTask, handleTask }) {
+export default function TabView({ tasks, loadingTask, handleTask, onEdit }) {
   const [activeTab, setActiveTab] = useState("tasks");
 
   return (
@@ -37,6 +37,7 @@ export default function TabView({ tasks, loadingTask, handleTask }) {
             tasks={tasks}
             loadingTask={loadingTask}
             handleTask={handleTask}
+            onEdit={onEdit}
           />
         )}
         {activeTab === "note" && <Note />}

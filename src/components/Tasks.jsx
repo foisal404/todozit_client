@@ -1,6 +1,6 @@
 import TaskCard from "./TaskCard";
 
-export default function Tasks({ tasks, loading, handleTask }) {
+export default function Tasks({ tasks, loading, handleTask, onEdit }) {
   const onDelete = async (taskId) => {
     handleTask((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
   };
@@ -16,7 +16,12 @@ export default function Tasks({ tasks, loading, handleTask }) {
   return (
     <div className="p-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {tasks.map((task) => (
-        <TaskCard key={task._id} task={task} onDelete={onDelete} />
+        <TaskCard
+          key={task._id}
+          task={task}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
       ))}
     </div>
   );

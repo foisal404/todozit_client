@@ -15,6 +15,17 @@ export default function Home() {
 
   // modal states
   const [add, setAdd] = useState(false);
+  const initialState = {
+    title: "",
+    description: "",
+    status: "Pending",
+    priority: "Low",
+    dueDate: new Date().toISOString().split("T")[0],
+    plannedDuration: 0,
+    timeSpent: 0,
+  };
+  const [task, setTask] = useState(initialState);
+  const [showModalType, setShowModalType] = useState("Add");
   const [showModal, setShowModal] = useState(false);
 
   // functions
@@ -42,6 +53,16 @@ export default function Home() {
       window.location.href = `${import.meta.env.VITE_API_URL}auth/google`;
     }
   };
+  const handleTaskEdit = (data) => {
+    setShowModalType("Edit");
+    setShowModal(true);
+    setTask(data);
+  };
+  const handleCLoseTaskModal = () => {
+    setTask(initialState);
+    setShowModal(false);
+    setShowModalType("Add");
+  };
 
   return (
     <div className="h-screen relative">
@@ -52,9 +73,12 @@ export default function Home() {
       />
       <TaskModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={handleCLoseTaskModal}
         userEmail={user.user?.email}
-        handleTask={setTasks}
+        handleTask={setTask}
+        handleTasks={setTasks}
+        showModalType={showModalType}
+        task={task}
       />
       <button
         onClick={handleClick}
@@ -75,7 +99,12 @@ export default function Home() {
           </button>
         </div>
       )}
-      <TabView tasks={tasks} loadingTask={loadingTask} handleTask={setTasks} />
+      <TabView
+        tasks={tasks}
+        loadingTask={loadingTask}
+        handleTask={setTasks}
+        onEdit={handleTaskEdit}
+      />
     </div>
   );
 }
