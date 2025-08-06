@@ -72,6 +72,7 @@ export default function TaskModal({
         <textarea
           name="description"
           value={task.description}
+          maxLength={150}
           onChange={handleChange}
           placeholder="Description"
           className="w-full mb-2 border p-2 rounded bg-slate-700
