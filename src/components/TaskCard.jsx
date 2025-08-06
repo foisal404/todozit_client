@@ -41,7 +41,9 @@ export default function TaskCard({ task, onEdit, onDelete }) {
           </button>
         </div>
       </div>
-      <p className="text-sm text-gray-200">{task.description}</p>
+      <p className="text-sm text-gray-200 overflow-hidden ">
+        {task.description}
+      </p>
       <div className="mt-2 text-sm space-y-1">
         <p>
           <strong>Status:</strong> {task.status}

@@ -8,6 +8,7 @@ import axios from "axios";
 import TitleCard from "./TitleCard";
 
 export default function Home() {
+  console.log(import.meta.env.VITE_API_URL);
   const user = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loadingTask, setLoadingTask] = useState(true);
